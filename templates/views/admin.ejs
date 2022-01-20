@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+</head>
+<body>
+    <form>
+    <table border="1">
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone No</th>
+            <th>Occupation</th>
+            <th>Accept</th>
+
+        </tr>
+    <% users.forEach(user =>{%>
+
+        <tr>
+        <td ><%=user.Name %></td>
+        <td ><%=user.Email%></td>
+        <td><%=user.phone%></td>
+        <td><%=user.Occupation%></td>
+        
+        <td><form action="/change" method="POST" ><input type="hidden" name="<%=user.Email%>" value="email"><input type="submit"  ></form></td>
+        </tr>
+    <%}) %>
+
+    </table>
+</form>
+
+
+    
+</body>
+
+</html>
