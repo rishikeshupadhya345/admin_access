@@ -4,10 +4,33 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>admin</title>
+    <script>
+        function preventrefresh(email){
+            var data={
+                Email:email
+            }
+            console.log(email);
+            document.getElementById("submit").addEventListener('click',function(event){
+                event.preventDefault();
+            })
+            fetch('/chan',{
+                method:'POST',
+                headers: {
+                     'Content-Type': 'application/json'
+                       // 'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+
+                body:JSON.stringify(data)
+            })
+
+        }
+    </script>
 
 </head>
 <body>
+    <h1>Admin Page</h1>
+    <h1>Users Awaiting Access</h1>
     <form>
     <table border="1">
         <tr>
@@ -21,16 +44,16 @@
     <% users.forEach(user =>{%>
 
         <tr>
-        <td ><%=user.Name %></td>
-        <td ><%=user.Email%></td>
+        <td><%=user.Name %></td>
+        <td><%=user.Email%></td>
         <td><%=user.phone%></td>
         <td><%=user.Occupation%></td>
-        
-        <td><form action="/change" method="POST" ><input type="hidden" name="<%=user.Email%>" value="email"><input type="submit"  ></form></td>
+        <td><input type="button" id="submit" onclick="preventrefresh('<%=user.Email%>') " value="accept" ></td>
         </tr>
     <%}) %>
 
     </table>
+    
 </form>
 
 

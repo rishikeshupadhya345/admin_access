@@ -1,4 +1,5 @@
 const express =  require("express");
+var bodyParser = require('body-parser')
 
 const path=require("path")
 const app=express();
@@ -19,9 +20,18 @@ app.use(express.static(static_path))
 app.set("view engine","ejs");
 app.set("views",template_path)
 app.use(express.json())
+app.use(bodyParser.json());
 app.use(express.urlencoded({extended:false}));
 app.get("/",(req,res)=>{
     res.render('index')
+
+})
+app.get("/admin",(req,res)=>{
+    Register.find({Validation:false},function(err,invusers){
+        
+        res.render('admin',{
+            users:invusers
+        })})
 
 })
 app.get("/register",(req,res)=>{
@@ -51,21 +61,18 @@ app.post("/home",async(req,res)=>{
         const uemail =await Register.findOne({Email:email});
         if(uemail.Password === pswd){
             if(uemail.Admin=== true){
-                 Register.find({Validation:false},function(err,invusers){
-        
-                     res.render('admin',{
-                         users:invusers
-                     })
+                      
+                res.status(201).redirect('/admin')
+            }
 
 
-                 })}
-            
+             
             
             else if(uemail.Validation===false){
-                res.send("wait for admin");
+                res.send("Admin yet to provide Access");
             }
             else{
-                res.status(201).send("accessed");
+                res.status(201).render('main');
             }
         }
 
@@ -76,22 +83,23 @@ app.post("/home",async(req,res)=>{
         res.status(400).send("invalid email")
     }
 })
-app.post("/change",(req,res)=>{
+app.post("/chan",async(req,res)=>{
     console.log("abc");
+    console.log(req.body)
+    
+    Register.update({Email:req.body.Email}, { $set:{Validation:true}},function(err, result) {
+        if (err)
+        {
+          console.log(err);
+  z
+        }
+        else{
+          console.log(result);
+        }
+    }
+    );
     console.log(req.body);
-    res.redirect('admin');
-    // Register.update({Email:req.body.Email}, { $set:{Validation:true}},function(err, result) {
-    //     if (err)
-    //     {
-    //       console.log(err);
-  
-    //     }
-    //     else{
-    //       console.log(result);
-    //     }
-    // }
-    // );
-    // console.log(req.body);
+    res.redirect('/admin');
 })
 app.listen(port,()=>{
     console.log(`Server is running`);
